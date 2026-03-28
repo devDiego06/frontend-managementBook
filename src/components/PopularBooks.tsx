@@ -13,29 +13,11 @@ type PropsBooks = {
   deleteBookHandler?: (id: number) => void
 }
 
-const loanBookHandler = (bookId: number) => {
-
-  const [loanBook, setLoanBook] = useState<Book | null>(null)
-
-
-
-  return (
-    <div className='fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full flex items-center justify-center bg-[#1e232e]'>
-      {/* formulario para prestar libro */}
-      <form action="">
-        <input type="text" placeholder='Nombre' />
-        <input type="email" placeholder='Email' />
-        <button type="submit">Prestar</button>
-      </form>
-    </div>
-  )
-}
 
 export default function PopularBooks({ books, deleteBookHandler }: PropsBooks) {
 
   //obtener la ruta actual
   const currentPath = window.location.pathname
-  console.log(loanBookHandler);
 
 
   return (
@@ -79,11 +61,15 @@ export default function PopularBooks({ books, deleteBookHandler }: PropsBooks) {
                     <>
                       <td className="px-6 py-4">{book.isbn}</td>
                       <td className="px-6 py-4 flex gap-2">
-                        <button onClick={() => deleteBookHandler?.(book.id)} className="text-red-600
-                         hover:text-red-800 cursor-pointer ml-2"><span className="material-symbols-outlined">delete</span></button>
+                        <button
+                          onClick={() => book.status === BookStatus.AVAILABLE ? deleteBookHandler?.(book.id) : alert('No se puede eliminar el libro porque esta prestado')}
+                          disabled={book.status !== BookStatus.AVAILABLE}
+                          className="text-red-600
+                         hover:text-red-800 cursor-pointer disabled:opacity-50 ml-2"><span className="material-symbols-outlined">delete</span></button>
                         <button
                           onClick={() => loanBookHandler(book.id)}
-                          className="text-blue-600 hover:text-blue-800 cursor-pointer ml-2"><span className="material-symbols-outlined">swap_horiz</span></button>
+                          disabled={book.status !== BookStatus.AVAILABLE}
+                          className="text-blue-600 hover:text-blue-800 cursor-pointer disabled:opacity-50 ml-2"><span className="material-symbols-outlined">swap_horiz</span></button>
                       </td>
                     </>
                   ) : null

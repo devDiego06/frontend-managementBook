@@ -1,3 +1,6 @@
+import { useState } from "react"
+import ModalForm from "./ModalForm"
+
 interface ActionButton {
   label: string
   description: string
@@ -11,6 +14,13 @@ const actions: ActionButton[] = [
 ]
 
 export default function QuickActions() {
+
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLoan, setIsLoan] = useState(false)
+
+
+
+
   return (
     <div className="flex flex-col gap-4">
       <h3 className="text-lg font-bold text-white">Quick Actions</h3>
@@ -18,6 +28,10 @@ export default function QuickActions() {
         {actions.map(({ label, description, icon, primary }) =>
           primary ? (
             <button
+              onClick={() => {
+                setIsLoan(false)
+                setIsOpen(true)
+              }}
               key={label}
               className="group flex items-center justify-between p-4 bg-[#1e232e] text-white rounded-xl shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
             >
@@ -31,6 +45,10 @@ export default function QuickActions() {
             </button>
           ) : (
             <button
+              onClick={() => {
+                setIsLoan(label === 'Register Loan' ? true : false)
+                setIsOpen(true)
+              }}
               key={label}
               className="group flex items-center justify-between p-4 bg-[#1e232e] border border-slate-800 rounded-xl hover:border-primary/50 transition-all"
             >
@@ -45,6 +63,9 @@ export default function QuickActions() {
           )
         )}
       </div>
+      {isOpen && (
+        <ModalForm onClose={() => setIsOpen(false)} isLoan={isLoan} />
+      )}
     </div>
   )
 }

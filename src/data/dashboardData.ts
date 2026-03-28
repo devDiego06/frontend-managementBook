@@ -1,28 +1,6 @@
 import type { StatItem, ActivityItem, BookItem } from "../types";
 
-export const statsData: StatItem[] = [
-  {
-    label: 'Total Books',
-    value: '12,450',
-    icon: 'library_books',
-    iconBg: 'bg-blue-50 bg-blue-900/20',
-    iconColor: 'text-primary',
-  },
-  {
-    label: 'Active Loans',
-    value: '342',
-    icon: 'assignment_return',
-    iconBg: 'bg-purple-50 bg-purple-900/20',
-    iconColor: 'text-purple-600 dark:text-purple-400',
-  },
-  {
-    label: 'Overdue Books',
-    value: '15',
-    icon: 'warning',
-    iconBg: 'bg-orange-50 bg-orange-900/20',
-    iconColor: 'text-orange-600 dark:text-orange-400',
-  },
-]
+
 
 export const activitiesData: ActivityItem[] = [
   {

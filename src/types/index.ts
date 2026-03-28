@@ -35,23 +35,22 @@ export interface BookItem {
 
 
 export interface Book {
-    id: number
+    id?: number
     title: string
     author: string
-    isbn: string
+    isbn: number
     publicationYear: number
-    status: BookStatus
-    createdAt: Date
-
+    status?: BookStatus
+    createdAt?: Date
 }
 
 export interface Loan {
-    id: number
-    book: Book
+    id?: number
+    bookId: number
     borrowerName: string
     borrowerEmail: string
-    loanDate: Date
-    dueDate: Date
+    loanDate?: Date
+    dueDate?: Date
     status?: BookStatus
     returnDate?: Date
 }

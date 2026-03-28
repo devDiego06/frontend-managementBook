@@ -2,20 +2,47 @@ import StatCard from '../components/StatCard'
 import RecentActivities from '../components/RecentActivities'
 import QuickActions from '../components/QuickActions'
 import PopularBooks from '../components/PopularBooks'
-import { statsData } from '../data/dashboardData'
 import { useEffect, useState } from 'react'
 import { getBooks } from '../data/axiosBook'
-import type { Book } from '../types'
+import { BookStatus, type Book, type StatItem } from '../types'
+import { sileo } from 'sileo'
+
+
+export const statsData: StatItem[] = [
+  {
+    label: 'Total Books',
+    value: '12,450',
+    icon: 'library_books',
+    iconBg: 'bg-blue-50 bg-blue-900/20',
+    iconColor: 'text-primary',
+  },
+  {
+    label: 'Active Loans',
+    value: '342',
+    icon: 'assignment_return',
+    iconBg: 'bg-purple-50 bg-purple-900/20',
+    iconColor: 'text-purple-600 dark:text-purple-400',
+  },
+  {
+    label: 'Overdue Books',
+    value: '15',
+    icon: 'warning',
+    iconBg: 'bg-orange-50 bg-orange-900/20',
+    iconColor: 'text-orange-600 dark:text-orange-400',
+  },
+]
 
 export default function Dashboard() {
 
   const [books, setBooks] = useState<Book[]>([])
 
   useEffect(() => {
-    getBooks().then(data => setBooks(data))
+    sileo.promise(getBooks().then(data => setBooks(data)), {
+      loading: { title: 'Cargando informacion...', duration: 4000 },
+      success: { title: 'Informacion cargada', duration: 4000 },
+      error: { title: 'Error al cargar la informacion', duration: 2000 }
+    })
   }, [])
-
-
 
   return (
     <main className="flex-1 ml-0 lg:ml-72 h-screen overflow-y-auto p-6 lg:p-10">
@@ -42,7 +69,12 @@ export default function Dashboard() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
           {statsData.map((stat) => (
-            <StatCard key={stat.label} {...stat} />
+            <StatCard key={stat.label} {...stat}
+              value={stat.label === 'Total Books' ? books.length : stat.value &&
+                stat.label === 'Active Loans' ? books.filter(book => book.status === BookStatus.BORROWED).length :
+                stat.value &&
+                  stat.label === 'Overdue Books' ? books.filter(book => book.status === BookStatus.RESERVED).length : stat.value}
+            />
           ))}
         </div>
 
@@ -54,6 +86,8 @@ export default function Dashboard() {
 
         {/* Popular Books */}
         <PopularBooks books={books} />
+
+
 
       </div>
     </main>

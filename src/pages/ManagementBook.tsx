@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PopularBooks from "../components/PopularBooks";
 import { BookStatus, type Book } from "../types";
-import { getBooks, deleteBook, getBooksByKeyword, getBookById } from "../data/axiosBook";
+import { getBooks, deleteBook, getBooksByKeyword } from "../data/axiosBook";
 import { sileo } from "sileo";
-import { title } from "process";
-import api from "../data/axios";
+import ModalForm from "../components/ModalForm";
+
 
 export default function ManagementBook() {
 
     const [books, setBooks] = useState<Book[]>([])
+    const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
         sileo.promise(getBooks().then(data => setBooks(data)), {
@@ -41,20 +42,37 @@ export default function ManagementBook() {
         getBooksByKeyword(value).then(data => setBooks(data))
     }
 
-    //prestar libro
-    const borrowBookHandler = (bookId: number, borrowerName: string, borrowerEmail: string) => {
 
+    const filterBooks = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        e.preventDefault()
+        const value = e.target.value
 
+        getBooks().then((data) => {
+            if (value === 'all') {
+                setBooks(data)
+            }
 
-        if (books.find(book => book.id === bookId)?.status !== BookStatus.AVAILABLE) {
-            return sileo.error({
-                title: 'Libro no disponible',
-                duration: 2000
-            })
-        }
+            if (value === 'available') {
+                const filteredBooks = data.filter(book => book.status === BookStatus.AVAILABLE)
+                setBooks(filteredBooks)
+            }
 
+            if (value === 'loaned') {
+                const filteredBooks = data.filter(book => book.status === BookStatus.BORROWED)
+                setBooks(filteredBooks)
+            }
 
+            if (value === 'expired') {
+                const filteredBooks = data.filter(book => book.status === BookStatus.RESERVED)
+                setBooks(filteredBooks)
+            }
+        })
     }
+
+    console.log(books);
+
+
+
 
 
     //eliminar libro
@@ -79,6 +97,7 @@ export default function ManagementBook() {
                     <div className="relative group">
                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1.5 text-slate-400">add</span>
                         <button
+                            onClick={() => setIsOpen(true)}
                             className="pl-5 pr-2 py-2.5 rounded-lg bg-[#1e232e] border border-slate-700 text-white focus:outline-none w-full md:w-64 text-sm group-hover:bg-[#1e232e] group-hover:text-white"
                         >
                             Agregar Libro
@@ -104,7 +123,7 @@ export default function ManagementBook() {
 
                 <div className="relative">
                     <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1.5  text-slate-400 cursor-pointer pr-5">filter_alt</span>
-                    <select name="select" id="select" className="bg-[#1e232e] text-white pr-10 px-10 py-2 rounded-lg">
+                    <select name="select" id="select" onChange={filterBooks} className="bg-[#1e232e] text-white pr-10 px-10 py-2 rounded-lg">
                         <option value="all" selected={true}>Todos</option>
                         <option value="available" selected={false}>Disponible</option>
                         <option value="loaned" selected={false}>Prestados</option>
@@ -115,6 +134,15 @@ export default function ManagementBook() {
 
 
             <PopularBooks books={books} deleteBookHandler={deleteBookHandler} />
+
+            {
+                isOpen && (
+                    <>
+                        <ModalForm onClose={() => setIsOpen(false)} />
+
+                    </>
+                )
+            }
 
         </main>
     )
