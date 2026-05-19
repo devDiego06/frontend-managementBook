@@ -8,7 +8,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { icon: 'dashboard', label: 'Dashboard', path: '/' },
   { icon: 'menu_book', label: 'Books', path: '/management-book' },
-  { icon: 'book_online', label: 'Loans', path: '/management-loans' },
+  { icon: 'book_online', label: 'Loans', path: '/management-loan' },
 ]
 
 

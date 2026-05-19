@@ -2,14 +2,15 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { createBook, createLoan, getBooks } from "../data/axiosBook";
 import { BookStatus, type Book } from "../types";
-import { sileo, Toaster } from "sileo";
+import { sileo } from "sileo";
 
 interface ModalFormProps {
     onClose: () => void;
-    isLoan?: boolean
+    isLoan?: boolean;
+    onSuccess?: () => void;
 }
 
-export default function ModalForm({ onClose, isLoan }: ModalFormProps) {
+export default function ModalForm({ onClose, isLoan, onSuccess }: ModalFormProps) {
 
     const [form, setForm] = useState<Book>({
         title: '',
@@ -82,7 +83,7 @@ export default function ModalForm({ onClose, isLoan }: ModalFormProps) {
         try {
             await createBook(form)
             onClose()
-
+            if (onSuccess) onSuccess()
 
         } catch (error: any) {
             if (axios.AxiosError) {
@@ -108,6 +109,7 @@ export default function ModalForm({ onClose, isLoan }: ModalFormProps) {
         try {
             await createLoan(loanForm)
             onClose()
+            if (onSuccess) onSuccess()
         } catch (error: any) {
             if (axios.AxiosError) {
                 setErrors(error.response?.data?.message || 'Error al crear el prestamo')

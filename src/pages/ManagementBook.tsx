@@ -112,7 +112,7 @@ export default function ManagementBook() {
                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1.5  text-slate-400">search</span>
                         <input
                             type="text"
-                            placeholder="Buscar libro por nombre, autor, ISBN"
+                            placeholder="Buscar libro por título o por autor"
                             onChange={handleSearch}
                             className="pl-10 pr-4 py-2.5 rounded-lg bg-[#1e232e] border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-primary w-full md:w-64 text-sm"
                         />
@@ -138,7 +138,7 @@ export default function ManagementBook() {
             {
                 isOpen && (
                     <>
-                        <ModalForm onClose={() => setIsOpen(false)} />
+                        <ModalForm onClose={() => setIsOpen(false)} onSuccess={() => getBooks().then(data => setBooks(data))} />
 
                     </>
                 )

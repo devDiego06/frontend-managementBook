@@ -4,8 +4,8 @@ export default function RecentActivities() {
   return (
     <div className="xl:col-span-2 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-white">Recent Activities</h3>
-        <a href="#" className="text-sm font-medium text-primary hover:text-primary/80">View All</a>
+        <h3 className="text-lg font-bold text-white">Actividades recientes</h3>
+        <a href="#" className="text-sm font-medium text-primary hover:text-primary/80">Ver todo</a>
       </div>
       <div className="flex flex-col bg-[#1e232e] rounded-xl border border-slate-800 overflow-hidden">
         {activitiesData.map((item, index) => (

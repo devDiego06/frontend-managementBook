@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { type Book, BookStatus } from '../types'
-import { getBookById } from '../data/axiosBook';
+
 
 const statusMap: Record<BookStatus, { label: string; class: string }> = {
   [BookStatus.AVAILABLE]: { label: 'Disponible', class: 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' },
@@ -67,7 +67,6 @@ export default function PopularBooks({ books, deleteBookHandler }: PropsBooks) {
                           className="text-red-600
                          hover:text-red-800 cursor-pointer disabled:opacity-50 ml-2"><span className="material-symbols-outlined">delete</span></button>
                         <button
-                          onClick={() => loanBookHandler(book.id)}
                           disabled={book.status !== BookStatus.AVAILABLE}
                           className="text-blue-600 hover:text-blue-800 cursor-pointer disabled:opacity-50 ml-2"><span className="material-symbols-outlined">swap_horiz</span></button>
                       </td>

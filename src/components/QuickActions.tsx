@@ -9,11 +9,15 @@ interface ActionButton {
 }
 
 const actions: ActionButton[] = [
-  { label: 'Add New Book', description: 'Catalog a new arrival', icon: 'add_circle', primary: true },
-  { label: 'Register Loan', description: 'Check out a book to a user', icon: 'qr_code_scanner' },
+  { label: 'Agregar Libro', description: 'Presiona si deseas agregar un nuevo libro', icon: 'add_circle', primary: true },
+  { label: 'Registrar Prestamo', description: 'Presiona si deseas realizar un nuevo prestamo', icon: 'qr_code_scanner' },
 ]
 
-export default function QuickActions() {
+interface QuickActionsProps {
+  onSuccess?: () => void;
+}
+
+export default function QuickActions({ onSuccess }: QuickActionsProps = {}) {
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoan, setIsLoan] = useState(false)
@@ -23,7 +27,7 @@ export default function QuickActions() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h3 className="text-lg font-bold text-white">Quick Actions</h3>
+      <h3 className="text-lg font-bold text-white">Acciones Rapidas</h3>
       <div className="flex flex-col gap-3">
         {actions.map(({ label, description, icon, primary }) =>
           primary ? (
@@ -46,7 +50,7 @@ export default function QuickActions() {
           ) : (
             <button
               onClick={() => {
-                setIsLoan(label === 'Register Loan' ? true : false)
+                setIsLoan(label === 'Registrar Prestamo' ? true : false)
                 setIsOpen(true)
               }}
               key={label}
@@ -64,7 +68,7 @@ export default function QuickActions() {
         )}
       </div>
       {isOpen && (
-        <ModalForm onClose={() => setIsOpen(false)} isLoan={isLoan} />
+        <ModalForm onClose={() => setIsOpen(false)} isLoan={isLoan} onSuccess={onSuccess} />
       )}
     </div>
   )

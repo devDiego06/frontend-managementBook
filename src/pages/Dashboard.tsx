@@ -1,11 +1,11 @@
 import StatCard from '../components/StatCard'
-import RecentActivities from '../components/RecentActivities'
 import QuickActions from '../components/QuickActions'
 import PopularBooks from '../components/PopularBooks'
 import { useEffect, useState } from 'react'
-import { getBooks } from '../data/axiosBook'
+import { getBooks, getStatsBooks } from '../data/axiosBook'
 import { BookStatus, type Book, type StatItem } from '../types'
 import { sileo } from 'sileo'
+
 
 
 export const statsData: StatItem[] = [
@@ -35,13 +35,15 @@ export const statsData: StatItem[] = [
 export default function Dashboard() {
 
   const [books, setBooks] = useState<Book[]>([])
+  const [stats, setStats] = useState<StatItem[]>([])
 
   useEffect(() => {
     sileo.promise(getBooks().then(data => setBooks(data)), {
       loading: { title: 'Cargando informacion...', duration: 4000 },
       success: { title: 'Informacion cargada', duration: 4000 },
       error: { title: 'Error al cargar la informacion', duration: 2000 }
-    })
+    }),
+      getStatsBooks()
   }, [])
 
   return (
@@ -51,8 +53,8 @@ export default function Dashboard() {
         {/* Header */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h2>
-            <p className="text-[#9da6b9] mt-1">Welcome back, here's what's happening at the library today.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-white">Dashboard</h2>
+            <p className="text-[#9da6b9] mt-1">Bienvenidos al panel de control.</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -80,9 +82,11 @@ export default function Dashboard() {
 
         {/* Activities & Quick Actions */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <RecentActivities />
-          <QuickActions />
+          {/* <RecentActivities /> */}
+          <QuickActions onSuccess={() => getBooks().then(data => setBooks(data))} />
         </div>
+
+
 
         {/* Popular Books */}
         <PopularBooks books={books} />

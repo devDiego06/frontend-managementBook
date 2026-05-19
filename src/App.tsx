@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar'
 import Dashboard from './pages/Dashboard'
 import ManagementBook from './pages/ManagementBook'
 import { sileo, Toaster } from 'sileo';
+import ManagementLoan from './pages/ManagementLoan';
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/management-book" element={<ManagementBook />} />
+          <Route path='/management-loan' element={<ManagementLoan />} />
         </Routes>
       </BrowserRouter>
     </div>
