@@ -8,9 +8,10 @@ interface ModalFormProps {
     onClose: () => void;
     isLoan?: boolean;
     onSuccess?: () => void;
+    getStatsBooks?: () => void;
 }
 
-export default function ModalForm({ onClose, isLoan, onSuccess }: ModalFormProps) {
+export default function ModalForm({ onClose, isLoan, onSuccess, getStatsBooks }: ModalFormProps) {
 
     const [form, setForm] = useState<Book>({
         title: '',
@@ -84,6 +85,7 @@ export default function ModalForm({ onClose, isLoan, onSuccess }: ModalFormProps
             await createBook(form)
             onClose()
             if (onSuccess) onSuccess()
+            if (getStatsBooks) getStatsBooks()
 
         } catch (error: any) {
             if (axios.AxiosError) {
@@ -110,6 +112,7 @@ export default function ModalForm({ onClose, isLoan, onSuccess }: ModalFormProps
             await createLoan(loanForm)
             onClose()
             if (onSuccess) onSuccess()
+            if (getStatsBooks) getStatsBooks()
         } catch (error: any) {
             if (axios.AxiosError) {
                 setErrors(error.response?.data?.message || 'Error al crear el prestamo')

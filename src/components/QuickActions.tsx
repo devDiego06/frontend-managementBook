@@ -15,9 +15,10 @@ const actions: ActionButton[] = [
 
 interface QuickActionsProps {
   onSuccess?: () => void;
+  getStatsBooks?: () => void;
 }
 
-export default function QuickActions({ onSuccess }: QuickActionsProps = {}) {
+export default function QuickActions({ onSuccess, getStatsBooks }: QuickActionsProps = {}) {
 
   const [isOpen, setIsOpen] = useState(false)
   const [isLoan, setIsLoan] = useState(false)
@@ -68,7 +69,7 @@ export default function QuickActions({ onSuccess }: QuickActionsProps = {}) {
         )}
       </div>
       {isOpen && (
-        <ModalForm onClose={() => setIsOpen(false)} isLoan={isLoan} onSuccess={onSuccess} />
+        <ModalForm onClose={() => setIsOpen(false)} isLoan={isLoan} onSuccess={onSuccess} getStatsBooks={getStatsBooks} />
       )}
     </div>
   )

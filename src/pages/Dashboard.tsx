@@ -3,8 +3,9 @@ import QuickActions from '../components/QuickActions'
 import PopularBooks from '../components/PopularBooks'
 import { useEffect, useState } from 'react'
 import { getBooks, getStatsBooks } from '../data/axiosBook'
-import { BookStatus, type Book, type StatItem } from '../types'
+import { BookStatus, type Book, type StatItem, type Stats } from '../types'
 import { sileo } from 'sileo'
+import ManagementTable from '../components/ManagementTable'
 
 
 
@@ -30,12 +31,22 @@ export const statsData: StatItem[] = [
     iconBg: 'bg-orange-50 bg-orange-900/20',
     iconColor: 'text-orange-600 dark:text-orange-400',
   },
+  {
+    label: 'Available Books',
+    value: '15',
+    icon: 'book',
+    iconBg: 'bg-green-50 bg-green-900/20',
+    iconColor: 'text-green-600 dark:text-green-400',
+  },
 ]
+
+
 
 export default function Dashboard() {
 
   const [books, setBooks] = useState<Book[]>([])
-  const [stats, setStats] = useState<StatItem[]>([])
+  const [stats, setStats] = useState<Stats>({ totalBooks: 0, availableBooks: 0, borrowedBooks: 0, activeLoans: 0, overdueLoans: 0 })
+
 
   useEffect(() => {
     sileo.promise(getBooks().then(data => setBooks(data)), {
@@ -43,8 +54,13 @@ export default function Dashboard() {
       success: { title: 'Informacion cargada', duration: 4000 },
       error: { title: 'Error al cargar la informacion', duration: 2000 }
     }),
-      getStatsBooks()
+
+      getStatsBooks().then(data => setStats(data))
+
   }, [])
+
+  console.log(stats);
+
 
   return (
     <main className="flex-1 ml-0 lg:ml-72 h-screen overflow-y-auto p-6 lg:p-10">
@@ -69,13 +85,15 @@ export default function Dashboard() {
         </header>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3">
           {statsData.map((stat) => (
             <StatCard key={stat.label} {...stat}
-              value={stat.label === 'Total Books' ? books.length : stat.value &&
-                stat.label === 'Active Loans' ? books.filter(book => book.status === BookStatus.BORROWED).length :
-                stat.value &&
-                  stat.label === 'Overdue Books' ? books.filter(book => book.status === BookStatus.RESERVED).length : stat.value}
+              value={
+                stat.label === 'Total Books' ? String(stats.totalBooks) : stat.value &&
+                  stat.label === 'Active Loans' ? String(stats.activeLoans) : stat.value &&
+                    stat.label === 'Overdue Books' ? String(stats.overdueLoans) : stat.value &&
+                      stat.label === 'Available Books' ? String(stats.availableBooks) : stat.value
+              }
             />
           ))}
         </div>
@@ -83,7 +101,7 @@ export default function Dashboard() {
         {/* Activities & Quick Actions */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* <RecentActivities /> */}
-          <QuickActions onSuccess={() => getBooks().then(data => setBooks(data))} />
+          <QuickActions onSuccess={() => getBooks().then(data => setBooks(data))} getStatsBooks={() => getStatsBooks().then(data => setStats(data))} />
         </div>
 
 

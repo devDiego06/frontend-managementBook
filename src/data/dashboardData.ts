@@ -1,41 +1,7 @@
-import type { StatItem, ActivityItem, BookItem } from "../types";
+import type { StatItem, BookItem } from "../types";
 
 
 
-export const activitiesData: ActivityItem[] = [
-  {
-    icon: 'keyboard_return',
-    text: 'The Great Gatsby',
-    action: 'returned by',
-    name: 'John Doe',
-    time: 'Today, 10:23 AM',
-    badge: { label: 'Returned', color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' },
-  },
-  {
-    icon: 'outbound',
-    text: 'Design Systems',
-    action: 'borrowed by',
-    name: 'Sarah Smith',
-    time: 'Today, 09:15 AM',
-    badge: { label: 'Loaned', color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' },
-  },
-  {
-    icon: 'person_add',
-    text: 'New member registration:',
-    action: '',
-    name: 'Michael Chen',
-    time: 'Yesterday, 4:45 PM',
-    badge: { label: 'New User', color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400' },
-  },
-  {
-    icon: 'warning',
-    text: '1984',
-    action: 'marked as overdue for',
-    name: 'Alex Johnson',
-    time: 'Yesterday, 2:00 PM',
-    badge: { label: 'Overdue', color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' },
-  },
-]
 
 export const popularBooksData: BookItem[] = [
   {

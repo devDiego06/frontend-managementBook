@@ -1,10 +1,10 @@
-import type { Book, Loan } from "../types";
+import type { Book, Loan, Stats } from "../types";
 import api from "./axios";
 
 
 //stats de los libros
 export const getStatsBooks = async () => {
-    const response = api.get<Book[]>("/books/stats");
+    const response = api.get<Stats>("/books/stats");
     return (await response).data;
 }
 

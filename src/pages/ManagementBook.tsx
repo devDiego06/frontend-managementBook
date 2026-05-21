@@ -4,12 +4,17 @@ import { BookStatus, type Book } from "../types";
 import { getBooks, deleteBook, getBooksByKeyword } from "../data/axiosBook";
 import { sileo } from "sileo";
 import ModalForm from "../components/ModalForm";
+import ManagementTable from "../components/ManagementTable";
 
 
 export default function ManagementBook() {
 
     const [books, setBooks] = useState<Book[]>([])
     const [isOpen, setIsOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [statusFilter, setStatusFilter] = useState("all");
+
 
     useEffect(() => {
         sileo.promise(getBooks().then(data => setBooks(data)), {
@@ -69,7 +74,7 @@ export default function ManagementBook() {
         })
     }
 
-    console.log(books);
+
 
 
 
@@ -133,8 +138,10 @@ export default function ManagementBook() {
             </div>
 
 
-            <PopularBooks books={books} deleteBookHandler={deleteBookHandler} />
+            {/* <PopularBooks books={books} deleteBookHandler={deleteBookHandler} /> */}
 
+            {/* Table */}
+            <ManagementTable books={books} isLoan={false} deleteBookHandler={deleteBookHandler} />
             {
                 isOpen && (
                     <>
@@ -145,5 +152,7 @@ export default function ManagementBook() {
             }
 
         </main>
+
+
     )
 }

@@ -11,14 +11,6 @@ export interface Badge {
     color: string
 }
 
-export interface ActivityItem {
-    icon: string
-    text: string
-    action: string
-    name: string
-    time: string
-    badge: Badge
-}
 
 export enum BookStatus {
     AVAILABLE = 'AVAILABLE', // DISPONIBLE
@@ -31,6 +23,14 @@ export interface BookItem {
     author: string
     status: BookStatus
     loans: number
+}
+
+export type Stats = {
+    totalBooks: number,
+    availableBooks: number,
+    borrowedBooks: number,
+    activeLoans: number,
+    overdueLoans: number
 }
 
 
@@ -46,7 +46,8 @@ export interface Book {
 
 export interface Loan {
     id?: number
-    bookId: number
+    bookId?: number
+    book?: Book
     borrowerName: string
     borrowerEmail: string
     loanDate?: Date

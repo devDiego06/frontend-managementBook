@@ -13,6 +13,7 @@ export default function ManagementLoan() {
     const [isLoading, setIsLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
+    const [isLoan, setIsLoan] = useState(true);
 
     // Obtener préstamos y libros
     const fetchData = async () => {
@@ -69,7 +70,7 @@ export default function ManagementLoan() {
         const matchesSearch =
             loan.borrowerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             loan.borrowerEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (bookMap[loan.bookId]?.title?.toLowerCase() || "").includes(searchQuery.toLowerCase());
+            (bookMap[loan.book?.id || loan.bookId || 0]?.title?.toLowerCase() || "").includes(searchQuery.toLowerCase());
 
         // 2. Filtrar por estado
         const loanStatus = getLoanDisplayStatus(loan);
@@ -138,6 +139,7 @@ export default function ManagementLoan() {
                 bookMap={bookMap}
                 isLoading={isLoading}
                 onReturnBook={handleReturnBook}
+                isLoan={isLoan}
             />
 
 
