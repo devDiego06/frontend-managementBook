@@ -3,6 +3,8 @@ import LoanManagementTable from "../components/ManagementTable";
 import { getBooks, returnLoan, getLoans } from "../data/axiosBook";
 
 import { BookStatus, type Book, type Loan } from "../types";
+import { sileo } from "sileo";
+import ModalForm from "../components/ModalForm";
 
 type BookMap = Record<number, Book>;
 
@@ -14,6 +16,7 @@ export default function ManagementLoan() {
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
     const [isLoan, setIsLoan] = useState(true);
+    const [isOpen, setIsOpen] = useState(false)
 
     // Obtener préstamos y libros
     const fetchData = async () => {
@@ -39,7 +42,11 @@ export default function ManagementLoan() {
     };
 
     useEffect(() => {
-        fetchData();
+        sileo.promise(fetchData(), {
+            loading: { title: 'Cargando prestamos...' },
+            success: { title: 'Prestamos cargados correctamente' },
+            error: { title: 'Error al cargar prestamos' }
+        })
     }, []);
 
     const handleReturnBook = async (loanId: number) => {
@@ -93,6 +100,7 @@ export default function ManagementLoan() {
                     <div className="relative group">
                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1.5 text-slate-400">add</span>
                         <button
+                            onClick={() => setIsOpen(prev => !prev)}
                             className="pl-5 pr-2 py-2.5 rounded-lg bg-[#1e232e] border border-slate-700 text-white focus:outline-none w-full md:w-64 text-sm group-hover:bg-[#1e232e] group-hover:text-white"
                         >
                             Agregar Prestamo
@@ -127,8 +135,8 @@ export default function ManagementLoan() {
                         className="bg-[#1e232e] text-white pr-10 px-10 py-2 rounded-lg cursor-pointer"
                     >
                         <option value="all">Todos</option>
-                        <option value="available">Disponible</option>
-                        <option value="loaned">Prestados</option>
+                        <option value="loaned">Activos</option>
+                        <option value="available">Devueltos</option>
                         <option value="expired">Vencidos</option>
                     </select>
                 </div>
@@ -141,7 +149,14 @@ export default function ManagementLoan() {
                 onReturnBook={handleReturnBook}
                 isLoan={isLoan}
             />
+            {
+                isOpen && (
+                    <>
+                        <ModalForm isLoan={isLoan} onClose={() => setIsOpen(false)} onSuccess={() => getLoans().then(data => setLoans(data))} />
 
+                    </>
+                )
+            }
 
         </main>
     )

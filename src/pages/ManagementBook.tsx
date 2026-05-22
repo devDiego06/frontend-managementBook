@@ -11,9 +11,7 @@ export default function ManagementBook() {
 
     const [books, setBooks] = useState<Book[]>([])
     const [isOpen, setIsOpen] = useState(false)
-    const [isLoading, setIsLoading] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [statusFilter, setStatusFilter] = useState("all");
+
 
 
     useEffect(() => {
@@ -77,9 +75,6 @@ export default function ManagementBook() {
 
 
 
-
-
-
     //eliminar libro
     const deleteBookHandler = (id: number) => {
         sileo.promise(deleteBook(id).then(() => {
@@ -132,7 +127,6 @@ export default function ManagementBook() {
                         <option value="all" selected={true}>Todos</option>
                         <option value="available" selected={false}>Disponible</option>
                         <option value="loaned" selected={false}>Prestados</option>
-                        <option value="expired" selected={false}>Vencidos</option>
                     </select>
                 </div>
             </div>

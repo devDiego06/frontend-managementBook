@@ -82,10 +82,18 @@ export default function ModalForm({ onClose, isLoan, onSuccess, getStatsBooks }:
         setIsLoading(true)
 
         try {
-            await createBook(form)
-            onClose()
-            if (onSuccess) onSuccess()
-            if (getStatsBooks) getStatsBooks()
+            await sileo.promise(createBook(form).then(() => {
+                if (onSuccess) onSuccess()
+                if (getStatsBooks) getStatsBooks()
+                onClose()
+            }), {
+                loading: { title: 'Creando libro...', duration: 2000 },
+                success: { title: 'Libro creado exitosamente', duration: 4000 },
+                error: { title: 'Error al crear el libro', duration: 2000 }
+            })
+
+
+
 
         } catch (error: any) {
             if (axios.AxiosError) {
@@ -109,10 +117,17 @@ export default function ModalForm({ onClose, isLoan, onSuccess, getStatsBooks }:
         setIsLoading(true)
 
         try {
-            await createLoan(loanForm)
+
             onClose()
-            if (onSuccess) onSuccess()
-            if (getStatsBooks) getStatsBooks()
+            sileo.promise(createLoan(loanForm).then(() => {
+                if (onSuccess) onSuccess()
+                if (getStatsBooks) getStatsBooks()
+            }), {
+                loading: { title: 'Creando prestamo', duration: 4000 },
+                success: { title: 'Prestamo creado correctamente', duration: 4000 },
+                error: { title: 'Error al crear el prestamo', duration: 2000 }
+            })
+
         } catch (error: any) {
             if (axios.AxiosError) {
                 setErrors(error.response?.data?.message || 'Error al crear el prestamo')
